@@ -32,7 +32,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (error) {
     console.log(error);
   } else {
-    console.log(user);
     let { data: heatmapss, error: err } = await supabase
       .from("heatmapss")
       .select("*")
@@ -42,7 +41,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       console.log(err);
     } else {
       heatmaps = heatmapss || [];
-      console.log(heatmapss);
+      (heatmapss);
     }
   }
 
@@ -62,12 +61,28 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </DialogTrigger>
 
         <div className="h-screen w-screen flex flex-col lg:flex-row">
-          <div className="lg:w-1/3 w-full flex flex-col  p-4 text-center">
+          <div className="lg:w-1/3 w-full flex flex-col  p-4 ">
             {/* <Avatar className="h-16 w-16 sm:h-20 sm:w-20 lg:h-32 lg:w-32 xl:h-52 xl:w-52">
               <AvatarImage src={imageSrc} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar> */}
-            <h1 className="text-2xl text-center lg:text-left">{title}</h1>
+            <div style={
+              {
+              fontFamily: "Bebas Neue",
+              fontSize: "3rem",
+              }
+            }>Momento</div>
+            <div style={
+               {
+                fontFamily: "Bebas Neue",
+                fontSize: "1rem",
+                }
+            }>Kepp Track of your daily wins</div>
+            {/* <h1 className="text-2xl text-center lg:text-left">{title}</h1> */}
+            <Button className="fixed shimmer-effect shimmer font-bold bottom-3 left-5 bg-green-400" >
+              {!isCurrentUser?"Get your Momento":"Share your Momento"}
+              </Button>
+
           </div>
           <div className="hidden lg:block border-r-2"></div>
 
