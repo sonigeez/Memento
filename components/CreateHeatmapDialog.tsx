@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { Dialog } from "@radix-ui/react-dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
 
 
@@ -21,14 +22,14 @@ const supabase = createClientComponentClient();
 
 export default function CreateHeatmapDialog() {
   const router = useRouter();
+  const { toast } = useToast()
+
 
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [isNetworkCall, setIsNetworkCall] = useState(false);
 
   async function insertHeatmapData(
     name: string,
-    description: string
   ): Promise<any> {
 
     if (isNetworkCall) return;
@@ -41,6 +42,8 @@ export default function CreateHeatmapDialog() {
       console.log(sessionError);
       return;
     } else {
+      setIsNetworkCall(true);
+      setName("");
     }
     const userId = session.user.id;
 
@@ -49,7 +52,6 @@ export default function CreateHeatmapDialog() {
       .insert([
         {
           heatmap_name: name,
-          heatmap_description: description,
           user_id: userId,
         },
       ])
@@ -60,6 +62,9 @@ export default function CreateHeatmapDialog() {
     } else {
       setIsNetworkCall(false);
       router.refresh();
+      toast({
+        title: "Saved",
+      })
 
     }
     return;
@@ -71,7 +76,7 @@ export default function CreateHeatmapDialog() {
         <DialogHeader>
           <DialogTitle>Add your Memento</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="flex flex-col items-center gap-y-6">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name
@@ -83,26 +88,20 @@ export default function CreateHeatmapDialog() {
               className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Description
-            </Label>
-            <Input
-              id="description"
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-              className="col-span-3"
-            />
-          </div>
-        </div>
-          <DialogPrimitive.Close className="">
           <Button
-            onClick={() => insertHeatmapData(name, description)}
+            onClick={() => insertHeatmapData(name)}
             type="submit"
+            className="w-20"
+            disabled={isNetworkCall || name == ""}
           >
-            Save
-          </Button>
+          <DialogPrimitive.Close className="">
+
+            Add
       </DialogPrimitive.Close>
+
+          </Button>
+        </div>
+       
       </DialogContent>
     </div>
   );

@@ -22,17 +22,51 @@ export async function GET(request: Request) {
   const client = createServerComponentClient({ cookies });
   const session = await client.auth.getSession();
   const email = session.data.session?.user.email;
+  const username = requestUrl.searchParams.get("username");
 
-  console.log("redirecting to", session.data.session?.user.email);
+  if(username){
     const { data, error } = await client
-      .from("users")
-      .insert([
-        { username: requestUrl.searchParams.get("username"), email: email, id: session.data.session?.user.id },
-      ]);
+    .from("users")
+    .insert([
+      { username: username, email: email, id: session.data.session?.user.id },
+    ]);
 
-      console.log('error', error)
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(
+    console.log('error', error)
+// URL to redirect to after sign in process completes
+    return NextResponse.redirect(
     requestUrl.origin + "/" + requestUrl.searchParams.get("username")
-  );
+    );
+  }else{
+    client
+    
+    
+    let { data: users, error } = await client
+    .from('users')
+    .select('*')
+    .eq('email', email)
+    .maybeSingle();
+    if(users){
+      return NextResponse.redirect(
+        requestUrl.origin + "/" + users.username
+        );
+      }else{
+        const randomNumber = Math.floor(100000000 + Math.random() * 900000000);
+
+        const { data, error } = await client
+        .from("users")
+        .insert([
+          { username: randomNumber, email: email, id: session.data.session?.user.id },
+        ]);
+        return NextResponse.redirect(
+          requestUrl.origin + "/" + randomNumber
+          );
+      }
+
+
+
+
+  }
+
+
+  
 }

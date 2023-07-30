@@ -1,28 +1,18 @@
 import HeatMap from "@/components/HeatMap";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import CreateHeatmapDialog from "@/components/CreateHeatmapDialog";
+import FloatingLeftButton from "@/components/FloatingRightButton";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const supabase = createServerComponentClient({ cookies });
-  const imageSrc = (await supabase.auth.getUser()).data?.user?.user_metadata
-    .avatar_url;
-  const title = params.slug; // replace with your title text
   let heatmaps: HeatmapType[] = [];
-
+  let isCurrentUser = false;
 
   const { data: user, error } = await supabase
     .from("users")
@@ -32,21 +22,26 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (error) {
     console.log(error);
   } else {
-    let { data: heatmapss, error: err } = await supabase
+    if (user == null) {
+      console.log("user not found");
+    }else{
+      let { data: heatmapss, error: err } = await supabase
       .from("heatmapss")
       .select("*")
-      .eq("user_id", user.id);
+      .eq("user_id", user.id??'');
 
     if (error) {
       console.log(err);
     } else {
       heatmaps = heatmapss || [];
-      (heatmapss);
+      isCurrentUser =   user.id == (await supabase.auth.getUser()).data?.user?.id;
+      ;
     }
+    }
+   
   }
 
-  let isCurrentUser = user.id == (await supabase.auth.getUser()).data?.user?.id;
-
+  
   return (
     <div>
       <Dialog>
@@ -62,26 +57,19 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
         <div className="h-screen w-screen flex flex-col lg:flex-row">
           <div className="lg:w-1/3 w-full flex flex-col  p-4 ">
-            {/* <Avatar className="h-16 w-16 sm:h-20 sm:w-20 lg:h-32 lg:w-32 xl:h-52 xl:w-52">
-              <AvatarImage src={imageSrc} />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar> */}
             <div style={
               {
               fontFamily: "Bebas Neue",
               fontSize: "3rem",
               }
-            }>Momento</div>
+            }>Memento</div>
             <div style={
                {
                 fontFamily: "Bebas Neue",
                 fontSize: "1rem",
                 }
             }>Kepp Track of your daily wins</div>
-            {/* <h1 className="text-2xl text-center lg:text-left">{title}</h1> */}
-            <Button className="fixed shimmer-effect shimmer font-bold bottom-3 left-5 bg-green-400" >
-              {!isCurrentUser?"Get your Momento":"Share your Momento"}
-              </Button>
+            <FloatingLeftButton isCurrentUser={isCurrentUser} />
 
           </div>
           <div className="hidden lg:block border-r-2"></div>
@@ -89,7 +77,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           <div className="lg:w-2/3 w-full flex flex-col p-4 overflow-y-auto">
             <ul>{
               heatmaps.length == 0?
-               (<div className="text-center">No heatmaps yet</div>):null
+               (<div className="text-center">No Memento yet</div>):null
               }
               {heatmaps.map((heatmap: HeatmapType) => (
                 <div>{<HeatMap isCurrentUser={isCurrentUser} heatmap={heatmap} />}</div>

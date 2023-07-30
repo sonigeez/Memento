@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Borel&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Zeyada&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
@@ -16,7 +15,7 @@
 }
 
 .shimmer-effect {
-  animation-duration: 3s;
+  animation-duration: 2s;
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-name: shimmer;

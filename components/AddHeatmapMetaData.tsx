@@ -2,7 +2,6 @@
 import { useState } from "react";
 import {
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
@@ -12,6 +11,7 @@ import { Button } from "./ui/button";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { useRouter } from 'next/navigation';
+import { useToast } from "./ui/use-toast";
 
 
 const supabase = createClientComponentClient();
@@ -23,6 +23,8 @@ export default function AddHeatmapMetaData(
   props: AddHeatmapMetaDataProps
 ): JSX.Element {
   const router = useRouter();
+  const { toast } = useToast()
+
 
   const [rating, setRating] = useState(0);
   const [isNetworkCall, setIsNetworkCall] = useState(false);
@@ -57,6 +59,9 @@ export default function AddHeatmapMetaData(
     } else {
       setIsNetworkCall(false);
       router.refresh();
+      toast({
+        title: "Saved",
+      })
 
     }
     return;
@@ -67,7 +72,7 @@ export default function AddHeatmapMetaData(
         <DialogHeader>
           <DialogTitle>Add your today's wins</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="flex flex-col items-center gap-y-6 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Rate
@@ -94,10 +99,11 @@ export default function AddHeatmapMetaData(
               className="col-span-3"
             />
           </div>
-        </div>
-        <DialogPrimitive.Close className="">
+          <DialogPrimitive.Close className=" w-20">
           <Button onClick={saveHeatmapData} type="submit">Save</Button>
           </DialogPrimitive.Close>
+        </div>
+       
       </DialogContent>
     </div>
   );

@@ -116,7 +116,7 @@ export default async function HeatMap({
                 areDatesEqualWithoutTime(new Date(d.created_at), date)
               );
               const opacity = data ? data.value * 0.1 : 0;
-
+              
               return (
                 <div>
                   <TooltipProvider>
@@ -124,11 +124,9 @@ export default async function HeatMap({
                       <TooltipTrigger>
                         <div
                           key={i}
-                          className=" h-6 w-6 border rounded-sm border-gray-400 transition-all duration-300 ease-in-out"
+                          className=" h-6 w-6 border rounded-sm transition-all duration-300 ease-in-out"
                           style={{
-                            background: `rgba(0, 0, 0, ${opacity})`,
-                            borderColor:
-                              opacity === 0 ? "#D9D9D9" : "transparent",
+                            background: `rgba(57,211,83,${opacity})`,
                           }}
                         ></div>
                       </TooltipTrigger>

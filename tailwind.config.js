@@ -18,6 +18,7 @@ module.exports = {
     extend: {
       
       colors: {
+        'green-grey':'#161B22',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -27,6 +28,7 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+      
         shimmerPrimary: {
           DEFAULT: '#79ff8a',
           dark: '#45ff52',
