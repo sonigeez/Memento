@@ -3,6 +3,7 @@ import {
   createServerComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -42,9 +43,8 @@ export async function GET(request: Request) {
     if(users){
       console.log("routing to " + users.username)
 
-      return NextResponse.redirect(
-        requestUrl.origin + "/" + users.username
-        );
+      redirect(requestUrl.origin + "/" + users.username);
+
       }else{
         const randomNumber = Math.floor(100000000 + Math.random() * 900000000);
 
@@ -54,16 +54,8 @@ export async function GET(request: Request) {
           { username: randomNumber, email: email, id: session.data.session?.user.id },
         ]);
         console.log("routing to random number")
-        return NextResponse.redirect(
-          requestUrl.origin + "/" + randomNumber
-          );
+        redirect(requestUrl.origin + "/" + randomNumber);
+
       }
-
-
-
-
   }
-
-
-  
 }
