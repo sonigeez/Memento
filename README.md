@@ -1,6 +1,6 @@
 
 # Memento
-keep track of your daily winds
+keep track of your daily wins
 
 
 # Todo
