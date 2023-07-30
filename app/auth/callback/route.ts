@@ -4,7 +4,6 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const dynamic = "force-dynamic";
 
@@ -30,22 +29,19 @@ export async function GET(request: Request) {
     .insert([
       { username: username, email: email, id: session.data.session?.user.id },
     ]);
-
-    console.log('error', error)
 // URL to redirect to after sign in process completes
     return NextResponse.redirect(
     requestUrl.origin + "/" + requestUrl.searchParams.get("username")
     );
   }else{
-    client
-    
-    
     let { data: users, error } = await client
     .from('users')
     .select('*')
     .eq('email', email)
     .maybeSingle();
     if(users){
+      console.log("routing to " + users.username)
+
       return NextResponse.redirect(
         requestUrl.origin + "/" + users.username
         );
@@ -57,6 +53,7 @@ export async function GET(request: Request) {
         .insert([
           { username: randomNumber, email: email, id: session.data.session?.user.id },
         ]);
+        console.log("routing to random number")
         return NextResponse.redirect(
           requestUrl.origin + "/" + randomNumber
           );
