@@ -26,7 +26,7 @@ export default function AddHeatmapMetaData(
   const { toast } = useToast()
 
 
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState<number|string>('');
   const [isNetworkCall, setIsNetworkCall] = useState(false);
   async function saveHeatmapData(){
 
