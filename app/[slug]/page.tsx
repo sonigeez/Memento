@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 fontFamily: "Bebas Neue",
                 fontSize: "1rem",
                 }
-            }>Kepp Track of your daily wins</div>
+            }>Keep Track of your daily wins</div>
             <FloatingLeftButton isCurrentUser={isCurrentUser} />
 
           </div>
